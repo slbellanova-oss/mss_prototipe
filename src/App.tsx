@@ -24,7 +24,12 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  if (showPrivacy) return <PrivacyPolicy onBack={() => setShowPrivacy(false)} />;
+  if (showPrivacy) return (
+    <>
+      <Navbar />
+      <PrivacyPolicy onBack={() => setShowPrivacy(false)} />
+    </>
+  );
 
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-[#121212] text-white">
