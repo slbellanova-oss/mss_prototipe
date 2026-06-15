@@ -20,11 +20,11 @@ export function CookieConsent({ onPrivacyClick }: CookieConsentProps) {
           className="fixed bottom-0 left-0 right-0 z-[60] border-t border-white/5 bg-[#0a0a0a]/95 backdrop-blur-xl"
         >
           <div className="mx-auto flex max-w-[1600px] flex-col items-center gap-4 px-6 py-5 md:flex-row md:gap-6 md:px-10 lg:px-16">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e34a05]/20">
                 <Cookie className="h-5 w-5 text-[#e34a05]" />
               </div>
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="font-manrope text-sm font-semibold text-white">
                   Куки
                 </p>
@@ -34,7 +34,7 @@ export function CookieConsent({ onPrivacyClick }: CookieConsentProps) {
               </div>
             </div>
 
-            <p className="flex-1 font-inter text-xs leading-relaxed text-white/40 md:text-sm">
+            <p className="flex-1 text-center font-inter text-xs leading-relaxed text-white/40 sm:text-left md:text-sm">
               Продолжая использовать сайт, вы соглашаетесь на обработку
               персональных данных в соответствии с{" "}
               <button onClick={onPrivacyClick} className="text-[#e34a05] underline underline-offset-2 transition-colors hover:text-white">
