@@ -156,7 +156,7 @@ export function Hero() {
               key={stat.label}
                className={`group relative border border-white/[0.06] bg-white/[0.03] px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:border-[#e34a05]/30 hover:bg-white/[0.07] hover:shadow-[0_0_30px_rgba(227,74,5,0.15)] ${roundMap[index]}`}
             >
-              <div className="flex items-center justify-center gap-3">
+              <div className="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-3">
                 <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#e34a05]/20">
                   <div className="absolute inset-0 rounded-full shimmer-orange opacity-50" />
                   <stat.Icon className="relative z-10 h-6 w-6 text-white" />
