@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronRight, Award, Building2, Clock, Shield } from "lucide-react";
 
 const stats = [
-  { Icon: Award, value: "10+", label: "лет опыта" },
+  { Icon: Award, value: "13+", label: "лет опыта" },
   { Icon: Building2, value: "500+", label: "реализованных объектов" },
   { Icon: Clock, value: "24", label: "часа среднее время выезда" },
   { Icon: Shield, value: "5", label: "лет гарантии" },
