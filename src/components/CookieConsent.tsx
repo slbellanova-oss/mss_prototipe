@@ -45,9 +45,10 @@ export function CookieConsent({ onPrivacyClick }: CookieConsentProps) {
             <div className="flex w-full shrink-0 items-center gap-3 md:w-auto">
               <button
                 onClick={() => setIsVisible(false)}
-                className="w-full rounded-full bg-[#e34a05] px-6 py-2.5 font-manrope text-sm font-semibold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(227,74,5,0.4)] md:w-auto"
+                className="group relative w-full overflow-hidden rounded-full bg-[#e34a05] px-6 py-2.5 font-manrope text-sm font-semibold text-white transition-all duration-300 hover:shadow-[0_0_30px_rgba(227,74,5,0.4)] md:w-auto"
               >
-                Принять
+                <span className="relative z-10">Принять</span>
+                <div className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-full" />
               </button>
               <button
                 onClick={() => setIsVisible(false)}
