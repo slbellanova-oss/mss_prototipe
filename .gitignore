@@ -1,0 +1,8 @@
+node_modules
+dist
+public/images/background_anima.mp4.realesrgan.mkv
+background_anima.mp4.mov
+background_anima.mp4.realesrgan.mkv
+nul
+*.log
+.DS_Store
