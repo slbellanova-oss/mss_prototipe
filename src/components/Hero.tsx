@@ -57,11 +57,12 @@ export function Hero() {
           playsInline
           className="absolute inset-0 h-full w-full object-cover"
         >
+          <source src="/images/background_anima_mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
           <source src="/images/background_anima_upscaled.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#121212]/70 via-[#121212]/50 to-[#121212]" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#121212]/80 via-transparent to-[#121212]/60" />
       </motion.div>
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#121212]/70 via-[#121212]/50 to-[#121212]" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-[#121212]/80 via-transparent to-[#121212]/60" />
 
       <div
         className="absolute inset-0 z-[1] opacity-[0.03]"
