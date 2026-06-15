@@ -19,7 +19,7 @@ export function CookieConsent({ onPrivacyClick }: CookieConsentProps) {
           transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
           className="fixed bottom-0 left-0 right-0 z-[60] border-t border-white/5 bg-[#0a0a0a]/95 backdrop-blur-xl"
         >
-          <div className="mx-auto flex max-w-[1600px] flex-col items-center gap-4 px-6 py-5 md:flex-row md:gap-6 md:px-10 lg:px-16">
+          <div className="mx-auto flex max-w-[1600px] flex-col items-end gap-4 px-6 py-5 md:flex-row md:items-center md:gap-6 md:px-10 lg:px-16">
             <div className="flex flex-col items-center gap-2 sm:flex-row sm:gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e34a05]/20">
                 <Cookie className="h-5 w-5 text-[#e34a05]" />
