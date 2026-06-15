@@ -145,18 +145,16 @@ export function Hero() {
           className="mt-12 grid grid-cols-2 lg:grid-cols-4"
         >
           {stats.map((stat, index) => {
-            const isFirst = index === 0;
-            const isLast = index === stats.length - 1;
-            const mobileRound = [
-              "rounded-tl-2xl",
-              "rounded-tr-2xl",
-              "rounded-bl-2xl",
-              "rounded-br-2xl",
-            ][index];
+            const roundMap: string[] = [
+              "rounded-tl-2xl lg:rounded-tl-2xl lg:rounded-bl-2xl",
+              "rounded-tr-2xl lg:rounded-none",
+              "rounded-bl-2xl lg:rounded-none",
+              "rounded-br-2xl lg:rounded-tr-2xl lg:rounded-br-2xl",
+            ];
             return (
             <div
               key={stat.label}
-               className={`group relative border border-white/[0.06] bg-white/[0.03] px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:border-[#e34a05]/30 hover:bg-white/[0.07] hover:shadow-[0_0_30px_rgba(227,74,5,0.15)] ${mobileRound}${isFirst ? " lg:rounded-s-2xl lg:rounded-tl-none lg:rounded-bl-none" : ""}${isLast ? " lg:rounded-e-2xl lg:rounded-tr-none lg:rounded-br-none" : ""}${!isFirst && !isLast ? " lg:rounded-none" : ""}`}
+               className={`group relative border border-white/[0.06] bg-white/[0.03] px-5 py-4 backdrop-blur-sm transition-all duration-300 hover:border-[#e34a05]/30 hover:bg-white/[0.07] hover:shadow-[0_0_30px_rgba(227,74,5,0.15)] ${roundMap[index]}`}
             >
               <div className="flex items-center justify-center gap-3">
                 <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#e34a05]/20">
