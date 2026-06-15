@@ -190,31 +190,31 @@ export function PriceCalculator() {
                     </div>
                   </div>
 
-                  <div className="mt-6 flex-1 space-y-3">
-                    <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3">
-                      <span className="font-inter text-sm text-white/60">
+                  <div className="mt-5 flex-1 space-y-3 md:mt-6">
+                    <div className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] px-3 py-3 md:px-4">
+                      <span className="font-inter text-xs text-white/60 md:text-sm">
                         {selected.label} <span className="text-white/30">({area.toFixed(1)} м²)</span>
                       </span>
-                      <span className="font-manrope font-semibold text-white tabular-nums">
+                      <span className="shrink-0 font-manrope text-sm font-semibold text-white tabular-nums md:text-base">
                         {areaPrice.toLocaleString()} ₽
                       </span>
                     </div>
                     {withAutomation && (
-                      <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3">
-                        <span className="font-inter text-sm text-white/60">
+                      <div className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] px-3 py-3 md:px-4">
+                        <span className="font-inter text-xs text-white/60 md:text-sm">
                           Автоматика
                         </span>
-                        <span className="font-manrope font-semibold text-white tabular-nums">
+                        <span className="shrink-0 font-manrope text-sm font-semibold text-white tabular-nums md:text-base">
                           +{automationPrice.toLocaleString()} ₽
                         </span>
                       </div>
                     )}
                     {withInstall && (
-                      <div className="flex items-center justify-between rounded-xl bg-white/[0.03] px-4 py-3">
-                        <span className="font-inter text-sm text-white/60">
+                      <div className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.03] px-3 py-3 md:px-4">
+                        <span className="font-inter text-xs text-white/60 md:text-sm">
                           Монтаж
                         </span>
-                        <span className="font-manrope font-semibold text-white tabular-nums">
+                        <span className="shrink-0 font-manrope text-sm font-semibold text-white tabular-nums md:text-base">
                           +{installPrice.toLocaleString()} ₽
                         </span>
                       </div>
@@ -228,12 +228,12 @@ export function PriceCalculator() {
                     )}
                   </div>
 
-                  <div className="mb-4 mt-6 rounded-2xl border border-[#e34a05]/20 bg-[#e34a05]/5 px-6 py-5">
-                    <div className="flex items-center justify-between">
-                      <span className="font-manrope text-base font-bold text-white">
+                  <div className="mb-4 mt-6 rounded-2xl border border-[#e34a05]/20 bg-[#e34a05]/5 px-5 py-4 md:px-6 md:py-5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-manrope text-sm font-bold text-white md:text-base">
                         Итого
                       </span>
-                      <span className="font-sora text-3xl font-bold text-[#e34a05] tabular-nums">
+                      <span className="font-sora text-2xl font-bold text-[#e34a05] tabular-nums md:text-3xl">
                         {total.toLocaleString()} ₽
                       </span>
                     </div>
