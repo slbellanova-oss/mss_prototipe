@@ -4,15 +4,18 @@ import { Menu, X, Phone } from "lucide-react";
 import { Logo } from "./Logo";
 import { cn } from "@/utils/cn";
 
+interface NavbarProps {
+  onCatalogClick?: () => void;
+}
+
 const navLinks = [
-  { label: "Каталог", href: "#catalog" },
   { label: "Услуги", href: "#services" },
   { label: "Проекты", href: "#projects" },
   { label: "О компании", href: "#about" },
   { label: "Контакты", href: "#contacts" },
 ];
 
-export function Navbar() {
+export function Navbar({ onCatalogClick }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -58,6 +61,13 @@ export function Navbar() {
           <Logo />
 
           <div className="hidden items-center gap-8 lg:flex">
+            <button
+              onClick={onCatalogClick}
+              className="group relative font-manrope text-base font-medium text-white transition-colors hover:text-[#e34a05]"
+            >
+              Каталог
+              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-[#e34a05] transition-all duration-300 group-hover:w-full" />
+            </button>
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -106,13 +116,22 @@ export function Navbar() {
             className="fixed inset-0 z-40 bg-[#121212]/95 backdrop-blur-xl pt-24 lg:hidden"
           >
             <div className="flex flex-col items-center gap-6 p-8">
+              <motion.button
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0 }}
+                onClick={() => { setMobileMenuOpen(false); onCatalogClick?.(); }}
+                className="font-sora text-2xl font-semibold text-white hover:text-[#e34a05]"
+              >
+                Каталог
+              </motion.button>
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.href}
                   href={link.href}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: (index + 1) * 0.1 }}
                   onClick={() => setMobileMenuOpen(false)}
                   className="font-sora text-2xl font-semibold text-white hover:text-[#e34a05]"
                 >

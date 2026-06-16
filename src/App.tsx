@@ -14,10 +14,12 @@ import { ContactForm } from "./components/ContactForm";
 import { Footer } from "./components/Footer";
 import { CookieConsent } from "./components/CookieConsent";
 import { PrivacyPolicy } from "./components/PrivacyPolicy";
+import { CatalogPage } from "./components/CatalogPage";
 
 export default function App() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
+  const [showCatalog, setShowCatalog] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
@@ -26,8 +28,15 @@ export default function App() {
 
   if (showPrivacy) return (
     <>
-      <Navbar />
+      <Navbar onCatalogClick={() => { setShowPrivacy(false); setShowCatalog(true); }} />
       <PrivacyPolicy onBack={() => setShowPrivacy(false)} />
+    </>
+  );
+
+  if (showCatalog) return (
+    <>
+      <Navbar onCatalogClick={() => setShowCatalog(true)} />
+      <CatalogPage onBack={() => setShowCatalog(false)} />
     </>
   );
 
@@ -36,11 +45,11 @@ export default function App() {
       <LoadingScreen />
       {isLoaded && (
         <>
-          <Navbar />
+          <Navbar onCatalogClick={() => setShowCatalog(true)} />
           <main>
             <Hero />
             <Services />
-            <Catalog />
+            <Catalog onCatalogClick={() => setShowCatalog(true)} />
             <PriceCalculator />
             <Projects />
             <Process />

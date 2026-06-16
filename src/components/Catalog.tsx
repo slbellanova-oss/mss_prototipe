@@ -60,7 +60,11 @@ const catalogItems = [
   },
 ];
 
-export function Catalog() {
+interface CatalogProps {
+  onCatalogClick?: () => void;
+}
+
+export function Catalog({ onCatalogClick }: CatalogProps) {
   return (
     <section id="catalog" className="relative py-24 md:py-32 xl:py-40">
       <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#e34a05]/5 blur-[150px]" />
@@ -163,6 +167,22 @@ export function Catalog() {
             </motion.div>
           ))}
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-12 text-center"
+        >
+          <button
+            onClick={onCatalogClick}
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-white/10 bg-white/5 px-8 py-3 font-manrope font-semibold text-white transition-all duration-300 hover:border-[#e34a05] hover:bg-[#e34a05]"
+          >
+            <span className="relative z-10">Смотреть весь каталог</span>
+            <ArrowUpRight className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
+            <div className="absolute inset-0 -translate-x-full bg-white/10 transition-transform duration-500 group-hover:translate-x-full" />
+          </button>
+        </motion.div>
       </div>
     </section>
   );
