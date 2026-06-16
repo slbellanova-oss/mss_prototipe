@@ -82,7 +82,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   const hasActiveFilters = searchQuery.trim() || sortBy !== "default";
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#121212] text-white">
+    <div className="relative min-h-screen bg-[#121212] text-white [overflow-x:clip]">
       <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-[1600px] px-6 pb-8 md:px-10 md:pb-12 lg:px-16 xl:px-20">
