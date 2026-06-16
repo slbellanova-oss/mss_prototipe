@@ -4,6 +4,17 @@ import { ArrowLeft, Search, ArrowUpRight, Grid, ArrowUpDown, ArrowRight, ArrowLe
 import { products, categories, type Product } from "@/data/catalog";
 import { cn } from "@/utils/cn";
 
+const categoryPageInfo: Record<string, { main: string; accent: string; desc: string }> = {
+  sectional: { main: "Секционные", accent: "ворота", desc: "Тёплые сэндвич-панельные ворота для гаражей, ангаров и складов." },
+  sliding: { main: "Откатные", accent: "ворота", desc: "Надёжные откатные системы для частных домов и коммерческих объектов." },
+  swing: { main: "Распашные", accent: "ворота", desc: "Классические распашные ворота с ручным или автоматическим приводом." },
+  industrial: { main: "Скоростные", accent: "ворота", desc: "Высокоскоростные промышленные решения для интенсивной логистики." },
+  rollers: { main: "Рольставни", accent: "", desc: "Компактные роллетные системы для гаражей, витрин и окон." },
+  fireproof: { main: "Противопожарные", accent: "ворота", desc: "Сертифицированные ворота с пределом огнестойкости до 60 минут." },
+  awnings: { main: "Маркизы", accent: "", desc: "Тканевые и алюминиевые маркизы для террас, кафе и витрин." },
+  automation: { main: "Автоматика", accent: "для ворот", desc: "Приводы, пульты и GSM/WiFi-модули для удобного управления." },
+};
+
 const iconMap: Record<string, React.ElementType> = {
   Grid, ArrowUpDown, ArrowRight, ArrowLeftRight, Zap, Scroll, Shield, Sun, Settings,
 };
@@ -51,6 +62,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [showFilter, setShowFilter] = useState(false);
+  const [intersectedCategory, setIntersectedCategory] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     let result = activeCategory === "all" ? [...products] : products.filter((p) => p.category === activeCategory);
@@ -104,6 +116,42 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
     return groups;
   }, [filtered, activeCategory]);
 
+  const activeCatInfo = useMemo(() => {
+    if (activeCategory === "all") return null;
+    return categories.find((c) => c.id === activeCategory) || null;
+  }, [activeCategory]);
+
+  useEffect(() => {
+    if (activeCategory !== "all") {
+      setIntersectedCategory(null);
+      return;
+    }
+
+    let observer: IntersectionObserver | null = null;
+    const raf = requestAnimationFrame(() => {
+      const sections = document.querySelectorAll("[data-category-section]");
+      if (sections.length === 0) return;
+
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              setIntersectedCategory(entry.target.getAttribute("data-category"));
+            }
+          }
+        },
+        { rootMargin: "-80px 0px -70% 0px", threshold: 0 }
+      );
+
+      sections.forEach((el) => observer!.observe(el));
+    });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      observer?.disconnect();
+    };
+  }, [activeCategory, filtered]);
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -113,6 +161,10 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   };
 
   const hasActiveFilters = searchQuery.trim() || sortBy !== "default";
+
+  const pageTitle = activeCatInfo
+    ? categoryPageInfo[activeCatInfo.id]
+    : null;
 
   return (
     <div className="relative min-h-screen bg-[#121212] text-white [overflow-x:clip]">
@@ -136,11 +188,14 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
               Каталог
             </span>
             <h1 className="mt-3 font-sora text-3xl font-bold md:text-5xl lg:text-6xl">
-              Линейка <span className="text-[#e34a05]">ворот</span>
+              {pageTitle ? (
+                <>{pageTitle.main} {pageTitle.accent && <span className="text-[#e34a05]">{pageTitle.accent}</span>}</>
+              ) : (
+                <>Линейка <span className="text-[#e34a05]">ворот</span></>
+              )}
             </h1>
             <p className="mt-4 max-w-2xl font-inter text-white/60">
-              Полный ассортимент ворот, рольставней, маркиз и автоматики. Фильтруйте по категориям,
-              находите нужное и запрашивайте индивидуальный расчёт.
+              {pageTitle?.desc || "Полный ассортимент ворот, рольставней, маркиз и автоматики. Фильтруйте по категориям, находите нужное и запрашивайте индивидуальный расчёт."}
             </p>
           </motion.div>
         </div>
@@ -166,7 +221,9 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
                       "flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 font-manrope text-sm font-medium transition-all duration-300",
                       isActive
                         ? "border-[#e34a05] bg-[#e34a05] text-white"
-                        : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
+                        : cat.id !== "all" && activeCategory === "all" && intersectedCategory === cat.id
+                          ? "border-[#e34a05] bg-[#e34a05]/10 text-white"
+                          : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
                     )}
                   >
                     <Icon className="h-3.5 w-3.5" />
@@ -268,7 +325,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
             {grouped.map((group) => {
               const Icon = iconMap[group.categoryIcon] || Grid;
               return (
-                <div key={group.categoryId}>
+                <div key={group.categoryId} data-category-section={group.categoryId}>
                   <div className="mb-5 flex items-center gap-3">
                     <Icon className="h-5 w-5 text-[#e34a05]" />
                     <h2 className="font-sora text-xl font-semibold text-white">{group.categoryName}</h2>
