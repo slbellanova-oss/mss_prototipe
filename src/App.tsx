@@ -26,16 +26,18 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  const goToMain = () => { setShowPrivacy(false); setShowCatalog(false); };
+
   if (showPrivacy) return (
     <>
-      <Navbar onCatalogClick={() => { setShowPrivacy(false); setShowCatalog(true); }} />
+      <Navbar onCatalogClick={() => { setShowPrivacy(false); setShowCatalog(true); }} onLogoClick={goToMain} />
       <PrivacyPolicy onBack={() => setShowPrivacy(false)} />
     </>
   );
 
   if (showCatalog) return (
     <>
-      <Navbar onCatalogClick={() => setShowCatalog(true)} />
+      <Navbar onCatalogClick={() => setShowCatalog(true)} onLogoClick={goToMain} />
       <CatalogPage onBack={() => setShowCatalog(false)} />
     </>
   );
@@ -45,7 +47,7 @@ export default function App() {
       <LoadingScreen />
       {isLoaded && (
         <>
-          <Navbar onCatalogClick={() => setShowCatalog(true)} />
+          <Navbar onCatalogClick={() => setShowCatalog(true)} onLogoClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} />
           <main>
             <Hero />
             <Services />

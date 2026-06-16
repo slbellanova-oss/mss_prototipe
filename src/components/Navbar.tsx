@@ -6,6 +6,7 @@ import { cn } from "@/utils/cn";
 
 interface NavbarProps {
   onCatalogClick?: () => void;
+  onLogoClick?: () => void;
 }
 
 const navLinks = [
@@ -15,7 +16,7 @@ const navLinks = [
   { label: "Контакты", href: "#contacts" },
 ];
 
-export function Navbar({ onCatalogClick }: NavbarProps) {
+export function Navbar({ onCatalogClick, onLogoClick }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -58,7 +59,9 @@ export function Navbar({ onCatalogClick }: NavbarProps) {
         )}
       >
         <div className="mx-auto flex max-w-[1600px] items-center justify-between px-6 md:px-10 lg:px-16">
-          <Logo />
+          <button onClick={onLogoClick} className="transition-opacity hover:opacity-80">
+            <Logo />
+          </button>
 
           <div className="hidden items-center gap-8 lg:flex">
             <button

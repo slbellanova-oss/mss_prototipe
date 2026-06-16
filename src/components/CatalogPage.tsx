@@ -82,12 +82,14 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   const hasActiveFilters = searchQuery.trim() || sortBy !== "default";
 
   return (
-    <div className="relative min-h-screen bg-[#121212] text-white">
-      <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
+    <div className="min-h-screen bg-[#121212] text-white">
+      <div className="fixed left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
 
-      <div className="relative mx-auto max-w-[1600px] px-6 pb-8 md:px-10 md:pb-12 lg:px-16 xl:px-20">
-
-        <div className="sticky top-[68px] z-20 bg-[#121212] pt-6 pb-2 md:pt-10 md:pb-4">
+      <div
+        className="fixed left-0 right-0 z-20 bg-[#121212]"
+        style={{ top: "68px" }}
+      >
+        <div className="mx-auto max-w-[1600px] px-6 pt-6 pb-2 md:px-10 md:pt-10 md:pb-4 lg:px-16 xl:px-20">
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -203,8 +205,12 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
             )}
           </AnimatePresence>
         </div>
+      </div>
 
-        <div className="mt-4 flex items-center justify-between font-inter text-sm text-white/40">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 pb-8 md:px-10 md:pb-12 lg:px-16 xl:px-20">
+        <div className="pt-[260px] md:pt-[300px] lg:pt-[320px]" />
+
+        <div className="flex items-center justify-between font-inter text-sm text-white/40">
           <span>
             Найдено: {filtered.length} {filtered.length === 1 ? "позиция" : filtered.length >= 2 && filtered.length <= 4 ? "позиции" : "позиций"}
           </span>
