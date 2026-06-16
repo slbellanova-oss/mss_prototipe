@@ -62,7 +62,11 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
   const [showFilter, setShowFilter] = useState(false);
-  const [intersectedCategory, setIntersectedCategory] = useState<string | null>(null);
+  const [intersectedCategory, setIntersectedCategory] = useState<string | null>(
+    categories.find((c) => c.id !== "all")?.id ?? null
+  );
+  const [isStuck, setIsStuck] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
   const filtered = useMemo(() => {
     let result = activeCategory === "all" ? [...products] : products.filter((p) => p.category === activeCategory);
@@ -85,12 +89,35 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
 
   const pillsRef = useRef<HTMLDivElement>(null);
   const activePillRef = useRef<HTMLButtonElement>(null);
+  const prevCategory = useRef(activeCategory);
 
   useEffect(() => {
     if (activePillRef.current) {
       activePillRef.current.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
     }
   }, [activeCategory]);
+
+  useEffect(() => {
+    if (prevCategory.current !== activeCategory) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      prevCategory.current = activeCategory;
+    }
+  }, [activeCategory]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStuck(!entry.isIntersecting);
+      },
+      { rootMargin: "-69px 0px 0px 0px", threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   const grouped = useMemo(() => {
     const groups: { categoryId: string; categoryName: string; categoryIcon: string; items: Product[] }[] = [];
@@ -123,33 +150,41 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
 
   useEffect(() => {
     if (activeCategory !== "all") {
-      setIntersectedCategory(null);
       return;
     }
 
-    let observer: IntersectionObserver | null = null;
-    const raf = requestAnimationFrame(() => {
+    const timer = setTimeout(() => {
       const sections = document.querySelectorAll("[data-category-section]");
       if (sections.length === 0) return;
 
-      observer = new IntersectionObserver(
+      const observer = new IntersectionObserver(
         (entries) => {
+          let bestId: string | null = null;
+          let bestTop = Infinity;
+
           for (const entry of entries) {
             if (entry.isIntersecting) {
-              setIntersectedCategory(entry.target.getAttribute("data-category"));
+              const top = entry.boundingClientRect.top;
+              if (top < bestTop) {
+                bestTop = top;
+                bestId = entry.target.getAttribute("data-category");
+              }
             }
           }
+
+          if (bestId) {
+            setIntersectedCategory(bestId);
+          }
         },
-        { rootMargin: "-80px 0px -70% 0px", threshold: 0 }
+        { rootMargin: "-80px 0px -50% 0px", threshold: 0 }
       );
 
-      sections.forEach((el) => observer!.observe(el));
-    });
+      sections.forEach((el) => observer.observe(el));
 
-    return () => {
-      cancelAnimationFrame(raf);
-      observer?.disconnect();
-    };
+      return () => observer.disconnect();
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [activeCategory, filtered]);
 
   const container = {
@@ -200,7 +235,11 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
           </motion.div>
         </div>
 
-        <div className="sticky top-[68px] z-20 bg-[#121212]/80 backdrop-blur-xl border-b border-white/5 pt-6 pb-3 md:pb-5">
+        <div ref={sentinelRef} />
+        <div className={cn(
+          "sticky top-[68px] z-20 pt-6 pb-3 md:pb-5 transition-all duration-300",
+          isStuck && "bg-[#121212]/80 backdrop-blur-xl border-b border-white/5"
+        )}>
           <div className="flex items-center gap-3">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
