@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Search, ArrowUpRight, Grid, ArrowUpDown, ArrowRight, ArrowLeftRight, Zap, Scroll, Shield, Sun, Settings, SlidersHorizontal, X } from "lucide-react";
 import { products, categories, type Product } from "@/data/catalog";
@@ -71,6 +71,39 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
     return result;
   }, [activeCategory, searchQuery, sortBy]);
 
+  const pillsRef = useRef<HTMLDivElement>(null);
+  const activePillRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (activePillRef.current) {
+      activePillRef.current.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }, [activeCategory]);
+
+  const grouped = useMemo(() => {
+    const groups: { categoryId: string; categoryName: string; categoryIcon: string; items: Product[] }[] = [];
+
+    if (activeCategory !== "all") {
+      const cat = categories.find((c) => c.id === activeCategory);
+      groups.push({
+        categoryId: activeCategory,
+        categoryName: cat?.name || activeCategory,
+        categoryIcon: cat?.icon || "Grid",
+        items: filtered,
+      });
+      return groups;
+    }
+
+    for (const cat of categories) {
+      if (cat.id === "all") continue;
+      const items = filtered.filter((p) => p.category === cat.id);
+      if (items.length > 0) {
+        groups.push({ categoryId: cat.id, categoryName: cat.name, categoryIcon: cat.icon, items });
+      }
+    }
+    return groups;
+  }, [filtered, activeCategory]);
+
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -118,17 +151,20 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
+              ref={pillsRef}
               className="no-scrollbar flex flex-1 gap-2 overflow-x-auto"
             >
               {categories.map((cat) => {
                 const Icon = iconMap[cat.icon] || Grid;
+                const isActive = activeCategory === cat.id;
                 return (
                   <button
                     key={cat.id}
+                    ref={isActive ? activePillRef : undefined}
                     onClick={() => setActiveCategory(cat.id)}
                     className={cn(
                       "flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 font-manrope text-sm font-medium transition-all duration-300",
-                      activeCategory === cat.id
+                      isActive
                         ? "border-[#e34a05] bg-[#e34a05] text-white"
                         : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
                     )}
@@ -227,11 +263,25 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
             initial="hidden"
             animate="show"
             exit={{ opacity: 0, transition: { duration: 0.15 } }}
-            className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            className="mt-6 space-y-10"
           >
-            {filtered.map((product) => (
-              <ProductCard key={product.id} product={product} variants={itemAnim} />
-            ))}
+            {grouped.map((group) => {
+              const Icon = iconMap[group.categoryIcon] || Grid;
+              return (
+                <div key={group.categoryId}>
+                  <div className="mb-5 flex items-center gap-3">
+                    <Icon className="h-5 w-5 text-[#e34a05]" />
+                    <h2 className="font-sora text-xl font-semibold text-white">{group.categoryName}</h2>
+                    <div className="h-px flex-1 bg-white/5" />
+                  </div>
+                  <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {group.items.map((product) => (
+                      <ProductCard key={product.id} product={product} variants={itemAnim} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
         </AnimatePresence>
 
