@@ -26,7 +26,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  const goToMain = () => { setShowPrivacy(false); setShowCatalog(false); };
+  const goToMain = () => { setShowPrivacy(false); setShowCatalog(false); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   if (showPrivacy) return (
     <>
