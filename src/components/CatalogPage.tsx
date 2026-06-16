@@ -82,15 +82,42 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   const hasActiveFilters = searchQuery.trim() || sortBy !== "default";
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white">
-      <div className="fixed left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
+    <div className="relative min-h-screen bg-[#121212] text-white">
+      <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
 
-      <div className="fixed left-0 right-0 z-20 border-b border-white/5 bg-[#121212]" style={{ top: "68px" }}>
-        <div className="mx-auto max-w-[1600px] px-6 pt-6 pb-2 md:px-10 md:pb-4 lg:px-16 xl:px-20">
+      <div className="relative mx-auto max-w-[1600px] px-6 pb-8 md:px-10 md:pb-12 lg:px-16 xl:px-20">
+
+        <div className="pt-24 md:pt-28">
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={onBack}
+            className="group mb-4 flex items-center gap-2 font-manrope text-sm font-medium text-white/60 transition-colors hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            На главную
+          </motion.button>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <span className="font-inter text-sm font-medium tracking-[0.2em] text-[#e34a05] uppercase">
+              Каталог
+            </span>
+            <h1 className="mt-3 font-sora text-3xl font-bold md:text-5xl lg:text-6xl">
+              Линейка <span className="text-[#e34a05]">ворот</span>
+            </h1>
+            <p className="mt-4 max-w-2xl font-inter text-white/60">
+              Полный ассортимент ворот, рольставней, маркиз и автоматики. Фильтруйте по категориям,
+              находите нужное и запрашивайте индивидуальный расчёт.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="sticky top-[68px] z-20 pt-6 pb-2 md:pb-4">
           <div className="flex items-center gap-3">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
               className="no-scrollbar flex flex-1 gap-2 overflow-x-auto"
             >
               {categories.map((cat) => {
@@ -116,6 +143,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
             <motion.button
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.25 }}
               onClick={() => setShowFilter(!showFilter)}
               className={cn(
                 "relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
@@ -177,36 +205,6 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
             )}
           </AnimatePresence>
         </div>
-      </div>
-
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 pb-8 md:px-10 md:pb-12 lg:px-16 xl:px-20">
-
-        <div className="pt-24 md:pt-28">
-          <motion.button
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            onClick={onBack}
-            className="group mb-4 flex items-center gap-2 font-manrope text-sm font-medium text-white/60 transition-colors hover:text-white"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            На главную
-          </motion.button>
-
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-            <span className="font-inter text-sm font-medium tracking-[0.2em] text-[#e34a05] uppercase">
-              Каталог
-            </span>
-            <h1 className="mt-3 font-sora text-3xl font-bold md:text-5xl lg:text-6xl">
-              Линейка <span className="text-[#e34a05]">ворот</span>
-            </h1>
-            <p className="mt-4 max-w-2xl font-inter text-white/60">
-              Полный ассортимент ворот, рольставней, маркиз и автоматики. Фильтруйте по категориям,
-              находите нужное и запрашивайте индивидуальный расчёт.
-            </p>
-          </motion.div>
-        </div>
-
-        <div className="h-[60px] md:h-[68px]" />
 
         <div className="flex items-center justify-between font-inter text-sm text-white/40">
           <span>
