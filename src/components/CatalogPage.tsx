@@ -98,20 +98,27 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   }, [activeCategory]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  useEffect(() => {
     if (prevCategory.current !== activeCategory) {
       prevCategory.current = activeCategory;
 
       if (activeCategory === "all") {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
-        const section = document.querySelector(`[data-category-section="${activeCategory}"]`);
-        if (section) {
-          const stickyEl = document.querySelector("[data-sticky-pills]");
-          const stickyH = stickyEl?.getBoundingClientRect().height || 80;
-          const offset = 68 + stickyH + 24;
-          const top = section.getBoundingClientRect().top + window.scrollY - offset;
-          window.scrollTo({ top, behavior: "smooth" });
-        }
+        const timer = setTimeout(() => {
+          const section = document.querySelector(`[data-category-section="${activeCategory}"]`);
+          if (section) {
+            const stickyEl = document.querySelector("[data-sticky-pills]");
+            const stickyH = stickyEl?.getBoundingClientRect().height || 80;
+            const offset = 68 + stickyH + 24;
+            const top = section.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: "smooth" });
+          }
+        }, 350);
+        return () => clearTimeout(timer);
       }
     }
   }, [activeCategory]);
