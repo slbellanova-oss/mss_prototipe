@@ -13,7 +13,7 @@ export function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#121212] text-white">
+    <div className="relative min-h-screen overflow-x-hidden bg-[#121212] text-white">
       <div className="absolute inset-0 bg-gradient-to-b from-[#121212] via-[#1a1a1a] to-[#121212]" />
       <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[200px]" />
 
