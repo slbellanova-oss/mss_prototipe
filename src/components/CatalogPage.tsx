@@ -99,10 +99,30 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
 
   useEffect(() => {
     if (prevCategory.current !== activeCategory) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
       prevCategory.current = activeCategory;
+
+      if (activeCategory === "all") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        const section = document.querySelector(`[data-category-section="${activeCategory}"]`);
+        if (section) {
+          const stickyEl = document.querySelector("[data-sticky-pills]");
+          const stickyH = stickyEl?.getBoundingClientRect().height || 80;
+          const offset = 68 + stickyH + 24;
+          const top = section.getBoundingClientRect().top + window.scrollY - offset;
+          window.scrollTo({ top, behavior: "smooth" });
+        }
+      }
     }
   }, [activeCategory]);
+
+  useEffect(() => {
+    if (activeCategory !== "all" || !intersectedCategory) return;
+    const pill = pillsRef.current?.querySelector(`[data-pill-id="${intersectedCategory}"]`);
+    if (pill) {
+      pill.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }, [intersectedCategory, activeCategory]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -236,7 +256,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
         </div>
 
         <div ref={sentinelRef} />
-        <div className={cn(
+        <div data-sticky-pills className={cn(
           "sticky top-[68px] z-20 pt-6 pb-3 md:pb-5 transition-all duration-300",
           isStuck && "bg-[#121212]/80 backdrop-blur-xl border-b border-white/5"
         )}>
@@ -254,6 +274,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
                 return (
                   <button
                     key={cat.id}
+                    data-pill-id={cat.id}
                     ref={isActive ? activePillRef : undefined}
                     onClick={() => setActiveCategory(cat.id)}
                     className={cn(
