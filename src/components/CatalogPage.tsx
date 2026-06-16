@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Search, ArrowUpRight, Grid, ArrowUpDown, ArrowRight, ArrowLeftRight, Zap, Scroll, Shield, Sun, Settings } from "lucide-react";
+import { ArrowLeft, Search, ArrowUpRight, Grid, ArrowUpDown, ArrowRight, ArrowLeftRight, Zap, Scroll, Shield, Sun, Settings, SlidersHorizontal, X } from "lucide-react";
 import { products, categories, type Product } from "@/data/catalog";
 import { cn } from "@/utils/cn";
 
@@ -12,10 +12,6 @@ const itemAnim = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.23, 1, 0.32, 1] as const } },
 };
-
-function formatPrice(n: number) {
-  return n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)} тыс. ₽` : `${n} ₽`;
-}
 
 const productImages: Record<string, string> = {
   "sec-std": "https://images.unsplash.com/photo-1621607512214-68297480165e?w=800&q=80",
@@ -42,6 +38,10 @@ const productImages: Record<string, string> = {
   "auto-wifi": "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80",
 };
 
+function formatPrice(n: number) {
+  return n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)} тыс. ₽` : `${n} ₽`;
+}
+
 interface CatalogPageProps {
   onBack: () => void;
 }
@@ -50,6 +50,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"default" | "price-asc" | "price-desc">("default");
+  const [showFilter, setShowFilter] = useState(false);
 
   const filtered = useMemo(() => {
     let result = activeCategory === "all" ? [...products] : products.filter((p) => p.category === activeCategory);
@@ -78,91 +79,143 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
     },
   };
 
+  const hasActiveFilters = searchQuery.trim() || sortBy !== "default";
+
   return (
     <div className="relative min-h-screen bg-[#121212] text-white">
       <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
 
-      <div className="relative mx-auto max-w-[1600px] px-6 pb-8 pt-24 md:px-10 md:pb-12 md:pt-28 lg:px-16 xl:px-20">
-        <motion.button
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={onBack}
-          className="group mb-8 flex items-center gap-2 font-manrope text-sm font-medium text-white/60 transition-colors hover:text-white"
-        >
-          <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-          На главную
-        </motion.button>
+      <div className="relative mx-auto max-w-[1600px] px-6 pb-8 md:px-10 md:pb-12 lg:px-16 xl:px-20">
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <span className="font-inter text-sm font-medium tracking-[0.2em] text-[#e34a05] uppercase">
-            Каталог
-          </span>
-          <h1 className="mt-3 font-sora text-3xl font-bold md:text-5xl lg:text-6xl">
-            Линейка <span className="text-[#e34a05]">ворот</span>
-          </h1>
-          <p className="mt-4 max-w-2xl font-inter text-white/60">
-            Полный ассортимент ворот, рольставней, маркиз и автоматики. Фильтруйте по категориям,
-            находите нужное и запрашивайте индивидуальный расчёт.
-          </p>
-        </motion.div>
-
-        <div className="mt-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="no-scrollbar flex gap-2 overflow-x-auto pb-2"
+        <div className="sticky top-[68px] z-20 bg-[#121212] pt-6 pb-2 md:pt-10 md:pb-4">
+          <motion.button
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={onBack}
+            className="group mb-4 flex items-center gap-2 font-manrope text-sm font-medium text-white/60 transition-colors hover:text-white"
           >
-            {categories.map((cat) => {
-              const Icon = iconMap[cat.icon] || Grid;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={cn(
-                    "flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 font-manrope text-sm font-medium transition-all duration-300",
-                    activeCategory === cat.id
-                      ? "border-[#e34a05] bg-[#e34a05] text-white"
-                      : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
-                  )}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  {cat.name}
-                </button>
-              );
-            })}
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+            На главную
+          </motion.button>
+
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <span className="font-inter text-sm font-medium tracking-[0.2em] text-[#e34a05] uppercase">
+              Каталог
+            </span>
+            <h1 className="mt-3 font-sora text-3xl font-bold md:text-5xl lg:text-6xl">
+              Линейка <span className="text-[#e34a05]">ворот</span>
+            </h1>
+            <p className="mt-4 max-w-2xl font-inter text-white/60">
+              Полный ассортимент ворот, рольставней, маркиз и автоматики. Фильтруйте по категориям,
+              находите нужное и запрашивайте индивидуальный расчёт.
+            </p>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25 }}
-            className="flex gap-3"
-          >
-            <div className="relative flex-1 md:flex-none">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
-              <input
-                type="text"
-                placeholder="Поиск..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-full border border-white/10 bg-white/5 px-4 py-2 pl-10 font-inter text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-[#e34a05]/50 md:w-48"
-              />
-            </div>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 font-manrope text-sm text-white outline-none transition-colors focus:border-[#e34a05]/50"
+          <div className="mt-6 flex items-center gap-3">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="no-scrollbar flex flex-1 gap-2 overflow-x-auto"
             >
-              <option value="default" className="bg-[#1D1D1D]">По умолчанию</option>
-              <option value="price-asc" className="bg-[#1D1D1D]">Цена ↑</option>
-              <option value="price-desc" className="bg-[#1D1D1D]">Цена ↓</option>
-            </select>
-          </motion.div>
+              {categories.map((cat) => {
+                const Icon = iconMap[cat.icon] || Grid;
+                return (
+                  <button
+                    key={cat.id}
+                    onClick={() => setActiveCategory(cat.id)}
+                    className={cn(
+                      "flex shrink-0 items-center gap-1.5 rounded-full border px-4 py-2 font-manrope text-sm font-medium transition-all duration-300",
+                      activeCategory === cat.id
+                        ? "border-[#e34a05] bg-[#e34a05] text-white"
+                        : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    {cat.name}
+                  </button>
+                );
+              })}
+            </motion.div>
+
+            <motion.button
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.25 }}
+              onClick={() => setShowFilter(!showFilter)}
+              className={cn(
+                "relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
+                showFilter || hasActiveFilters
+                  ? "border-[#e34a05] bg-[#e34a05] text-white"
+                  : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:text-white"
+              )}
+            >
+              {showFilter ? (
+                <X className="h-4 w-4" />
+              ) : (
+                <SlidersHorizontal className="h-4 w-4" />
+              )}
+              {hasActiveFilters && !showFilter && (
+                <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-[#e34a05]" />
+              )}
+            </motion.button>
+          </div>
+
+          <AnimatePresence>
+            {showFilter && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="mt-4 flex flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl sm:flex-row">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                    <input
+                      type="text"
+                      placeholder="Поиск по названию или описанию..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full rounded-full border border-white/10 bg-[#121212] px-4 py-2.5 pl-10 font-inter text-sm text-white outline-none transition-colors placeholder:text-white/30 focus:border-[#e34a05]/50"
+                    />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery("")}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                    className="w-full rounded-full border border-white/10 bg-[#121212] px-4 py-2.5 font-manrope text-sm text-white outline-none transition-colors focus:border-[#e34a05]/50 sm:w-auto"
+                  >
+                    <option value="default" className="bg-[#1D1D1D]">По умолчанию</option>
+                    <option value="price-asc" className="bg-[#1D1D1D]">Цена: по возрастанию</option>
+                    <option value="price-desc" className="bg-[#1D1D1D]">Цена: по убыванию</option>
+                  </select>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        <div className="mt-4 font-inter text-sm text-white/40">
-          Найдено: {filtered.length} {filtered.length === 1 ? "позиция" : filtered.length >= 2 && filtered.length <= 4 ? "позиции" : "позиций"}
+        <div className="mt-4 flex items-center justify-between font-inter text-sm text-white/40">
+          <span>
+            Найдено: {filtered.length} {filtered.length === 1 ? "позиция" : filtered.length >= 2 && filtered.length <= 4 ? "позиции" : "позиций"}
+          </span>
+          {hasActiveFilters && (
+            <button
+              onClick={() => { setSearchQuery(""); setSortBy("default"); }}
+              className="text-[#e34a05] underline underline-offset-4 transition-colors hover:text-white"
+            >
+              Сбросить
+            </button>
+          )}
         </div>
 
         <AnimatePresence mode="wait">
