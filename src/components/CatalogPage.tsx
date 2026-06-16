@@ -82,7 +82,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
     <div className="relative min-h-screen bg-[#121212] text-white">
       <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#e34a05]/5 blur-[150px] pointer-events-none" />
 
-      <div className="relative mx-auto max-w-[1600px] px-6 py-8 md:px-10 md:py-12 lg:px-16 xl:px-20">
+      <div className="relative mx-auto max-w-[1600px] px-6 pb-8 pt-24 md:px-10 md:pb-12 md:pt-28 lg:px-16 xl:px-20">
         <motion.button
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -221,7 +221,7 @@ function ProductCard({ product, variants }: { product: Product; variants: typeof
   return (
     <motion.div
       variants={variants}
-      className="group relative overflow-hidden rounded-2xl border border-white/5 bg-[#1D1D1D] transition-all duration-500 hover:border-[#e34a05]/30 hover:shadow-[0_0_40px_rgba(227,74,5,0.1)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/5 bg-[#1D1D1D] transition-all duration-500 hover:border-[#e34a05]/30 hover:shadow-[0_0_40px_rgba(227,74,5,0.1)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {!imgLoaded && (
@@ -253,7 +253,7 @@ function ProductCard({ product, variants }: { product: Product; variants: typeof
         </div>
       </div>
 
-      <div className="p-5">
+      <div className="flex flex-1 flex-col p-5">
         <h3 className="font-manrope text-base font-bold text-white md:text-lg line-clamp-2">
           {product.name}
         </h3>
@@ -277,7 +277,7 @@ function ProductCard({ product, variants }: { product: Product; variants: typeof
           )}
         </div>
 
-        <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+        <div className="mt-auto flex items-center justify-between border-t border-white/5 pt-4">
           <div>
             <span className="font-inter text-[11px] text-white/30">от</span>
             <p className="font-manrope text-lg font-bold text-[#e34a05]">{formatPrice(product.priceFrom)}</p>
