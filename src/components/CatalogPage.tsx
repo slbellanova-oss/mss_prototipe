@@ -112,7 +112,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
           </motion.div>
         </div>
 
-        <div className="sticky top-[68px] z-20 pt-6 pb-2 md:pb-4">
+        <div className="sticky top-[68px] z-20 bg-[#121212]/80 backdrop-blur-xl border-b border-white/5 pt-6 pb-3 md:pb-5">
           <div className="flex items-center gap-3">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -204,20 +204,20 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
 
-        <div className="flex items-center justify-between font-inter text-sm text-white/40">
-          <span>
-            Найдено: {filtered.length} {filtered.length === 1 ? "позиция" : filtered.length >= 2 && filtered.length <= 4 ? "позиции" : "позиций"}
-          </span>
-          {hasActiveFilters && (
-            <button
-              onClick={() => { setSearchQuery(""); setSortBy("default"); }}
-              className="text-[#e34a05] underline underline-offset-4 transition-colors hover:text-white"
-            >
-              Сбросить
-            </button>
-          )}
+          <div className="mt-3 flex items-center justify-between font-inter text-sm text-white/40">
+            <span>
+              Найдено: {filtered.length} {filtered.length === 1 ? "позиция" : filtered.length >= 2 && filtered.length <= 4 ? "позиции" : "позиций"}
+            </span>
+            {hasActiveFilters && (
+              <button
+                onClick={() => { setSearchQuery(""); setSortBy("default"); }}
+                className="text-[#e34a05] underline underline-offset-4 transition-colors hover:text-white"
+              >
+                Сбросить
+              </button>
+            )}
+          </div>
         </div>
 
         <AnimatePresence mode="wait">
