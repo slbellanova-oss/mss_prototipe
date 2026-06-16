@@ -200,7 +200,7 @@ export function CatalogPage({ onBack }: CatalogPageProps) {
           </motion.div>
         </div>
 
-        <div className="sticky top-[68px] z-20 pt-6 pb-3 md:pb-5">
+        <div className="sticky top-[68px] z-20 bg-[#121212]/80 backdrop-blur-xl border-b border-white/5 pt-6 pb-3 md:pb-5">
           <div className="flex items-center gap-3">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
